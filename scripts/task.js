@@ -1,5 +1,11 @@
 'use strict';
 
-app.controller('taskController', function($scope) {
-  $scope.title = "Cleaning my house"
+app.controller('TaskController', function($scope, $firebase, FIREBASEURL) {
+
+  var ref = new Firebase(FIREBASEURL);
+  var fbTasks = $firebase(ref.child('/tasks')).$asArray();
+
+  $scope.postTask = function(task) {
+    fbTasks.$add(task);
+  }
 });

@@ -7,7 +7,7 @@ var app = angular
     'ngRoute',
     'firebase'
   ])
-  .constant('FURL', 'https://ogfirebaseapp.firebaseIO.com')
+  .constant('FIREBASEURL', 'https://ogfirebaseapp.firebaseIO.com')
   .config(function ($routeProvider) {
     $routeProvider
       .when('/', {
@@ -16,7 +16,7 @@ var app = angular
       })
       .when('/post', {
         templateUrl: 'views/post.html',
-        controller: 'taskController'
+        controller: 'TaskController'
       })
       .when('/browse', {
         templateUrl: 'views/browse.html'
