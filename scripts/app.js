@@ -27,10 +27,12 @@ var app = angular
         controller: "TaskController"
       })
       .when('/register', {
-        templateUrl: 'views/register.html'
+        templateUrl: 'views/register.html',
+        controller: 'AuthController'
       })
       .when('/login', {
-        templateUrl: 'views/login.html'
+        templateUrl: 'views/login.html',
+        controller: 'AuthController'
       })
       .otherwise({
         redirectTo: '/'

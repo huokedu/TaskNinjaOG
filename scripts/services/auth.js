@@ -7,7 +7,17 @@ app.factory('Auth', function(FIREBASEURL, $firebaseAuth, $firebase) {
 
   var Auth = {
 
-    user: {};
+    user: {},
+
+    createProfile: function(uid, user) {
+      var profile = {
+        name: user.name,
+        email: user.email
+      };
+
+      var profileRef = $firebase(ref.child('profile'));
+      return profileRef.$set(uid, profile);
+    },
 
     login: function(user) {
       return auth.$authWithPassword(
@@ -19,6 +29,8 @@ app.factory('Auth', function(FIREBASEURL, $firebaseAuth, $firebase) {
         { email: user.email,
           password: user.password}).then(function() {
           return Auth.login(user);
+        }).then(function(data) {
+          return Auth.createProfile(data.uid, user);
         });
     },
     logout: function(user) {
@@ -32,16 +44,23 @@ app.factory('Auth', function(FIREBASEURL, $firebaseAuth, $firebase) {
     },
     signedIn: function() {
       return Auth.user && Auth.user.provider;
-    }
+    },
   };
 
   auth.$onAuth(function(authData) {
     if(authData) {
       angular.copy(authData, Auth.user);
+      Auth.user.profile = $firebase(ref.child('profile').child(authData.uid)).$asObject();
     } else {
+      if (Auth.user && Auth.user.profile) {
+        Auth.user.profile.$destroy();
+      }
+
       angular.copy({}, Auth.user);
     }
   });
+
+
 
 
   return Auth;
